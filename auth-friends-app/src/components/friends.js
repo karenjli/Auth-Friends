@@ -17,6 +17,25 @@ const Friends = () => {
       .catch(err => console.log(err));
   }, []);
 
+  //   onChange = event => {
+  //     this.setState({
+  //       info: {
+  //         ...this.state.info,
+  //         [event.target.name]: event.target.value,
+  //       },
+  //     });
+  //   };
+
+  //   const onSubmit = event => value => {
+  //     event.preventDefault();
+  //     console.log(value);
+
+  //     axiosWithAuth()
+  //       .post("http://localhost:5000/api/friends", value)
+  //       .then(res => {
+  //         setFriends(res.data);
+  //       });
+  //   };
   return (
     <div className="friendlist">
       {friends.map(item => (

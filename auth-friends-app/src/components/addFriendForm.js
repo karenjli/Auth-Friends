@@ -17,15 +17,16 @@ class AddFriendForm extends React.Component {
         [event.target.name]: event.target.value,
       },
     });
+    console.log(this.state.info);
   };
 
   onSubmit = event => {
-    console.log(this.state.info);
     event.preventDefault();
 
     axiosWithAuth()
       .post("http://localhost:5000/api/friends", this.state.info)
       .then(res => {
+        console.log(res);
         this.setState({});
       });
   };
