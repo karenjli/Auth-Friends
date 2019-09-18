@@ -1,38 +1,65 @@
 import React, { useState } from "react";
 import { axiosWithAuth } from "../utils/axiosWithAuth";
 
-const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-
-  const UsernameHandler = event => {
-    setUsername(event.target.value);
+class Login extends React.Component {
+  state = {
+    credentials: {
+      username: "",
+      password: "",
+    },
+    isLoading: false,
   };
 
-  const passwordHandler = event => {
-    setPassword(event.target.value);
+  onChange = event => {
+    this.setState({
+      credentials: {
+        ...this.state.credentials,
+        [event.target.name]: event.target.value,
+      },
+    });
+    console.log(this.state.credentials);
   };
-  return (
-    <div className="login">
-      <form>
-        <label className="username-label">Username</label>
-        <input
-          type="text"
-          name="username"
-          onChange={UsernameHandler}
-          value={username}
-        ></input>
-        <label className="username-label">Password</label>
-        <input
-          type="password"
-          name="password"
-          onChange={passwordHandler}
-          value={password}
-        ></input>
-        <button>Submit</button>
-      </form>
-    </div>
-  );
-};
+
+  login = event => {
+    event.preventDefault();
+    this.setState({ isLoading: true });
+    axiosWithAuth()
+      .post("/api/login", this.state.credentials)
+      .then(res => {
+        localStorage.setItem("token", res.data.payload);
+        this.props.history.push("/myfriends");
+      })
+      .catch(err => {
+        console.log(err);
+        this.setState({ isLoading: false });
+      });
+  };
+  render() {
+    return (
+      <div className="login">
+        <form onSubmit={this.login}>
+          <label className="username-label">Username</label>
+          <input
+            type="text"
+            name="username"
+            onChange={this.onChange}
+            value={this.state.credentials.username}
+          />
+          <label className="username-label">Password</label>
+          <input
+            type="password"
+            name="password"
+            onChange={this.onChange}
+            value={this.state.credentials.password}
+          />
+          <button type="submit">Submit</button>
+        </form>
+        {this.setState.isLoading === true ? (
+          <p className="loading">Loading</p>
+        ) : null}
+      </div>
+    );
+  }
+}
 
 export default Login;
